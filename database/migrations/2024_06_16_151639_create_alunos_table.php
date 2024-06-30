@@ -20,8 +20,9 @@ return new class extends Migration
             $table->string('serie', 15);           
             $table->string('curso', 50);           
             $table->string('email');           
-            $table->integer('telefone');           
-            $table->string('imagem');           
+            $table->string('telefone');           
+            $table->string('imagem');  
+            $table->softDeletes();
             $table->timestamps();
         });
     }

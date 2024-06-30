@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nome', 100);
             $table->string('email');
             $table->string('senha');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('data_acesso');
             $table->time('hora_acesso');
             $table->string('dia_semana');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

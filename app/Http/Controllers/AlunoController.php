@@ -3,64 +3,78 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aluno;
-use App\Http\Requests\StoreAlunoRequest;
-use App\Http\Requests\UpdateAlunoRequest;
+use Illuminate\Http\Request;
 
 class AlunoController extends Controller
 {
+    private $aluno;
+
+    public function __construct(Aluno $aluno) {
+        $this->aluno = $aluno;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $aluno = $this->aluno->get();
+        return Response()->json($aluno, 200);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAlunoRequest $request)
+    public function store(Request $request)
     {
-        //
+        $aluno = $this->aluno->create([
+            'nome' => $request->nome,
+            'matricula'=> $request->matricula,
+            'data_nascimento' => $request->data_nascimento,
+            'sexo' => $request->sexo,
+            'serie' => $request->serie,
+            'curso' => $request->curso,
+            'email' => $request->email,
+            'telefone' => $request->telefone,
+            'imagem' => $request->imagem
+        ]);
+
+        return Response()->json($aluno, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Aluno $aluno)
+    public function show($id)
     {
-        //
-    }
+        $aluno = $this->aluno->find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Aluno $aluno)
-    {
-        //
+        return Response()->json($aluno, 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAlunoRequest $request, Aluno $aluno)
+    public function update(Request $request, $id)
     {
-        //
+        $aluno = $this->aluno->find($id);
+
+        if ($request->method() === 'PATCH') {
+
+            $aluno->fill($request->all());
+            $aluno->save();
+        }
+
+        return Response()->json($aluno, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Aluno $aluno)
+    public function destroy(Request $request, $id)
     {
-        //
+        $aluno = $this->aluno->find($id);
+        $aluno->delete();
+
+        return Response()->json(['msg' => 'Aluno(a), excluido com sucesso']);
     }
 }
