@@ -21,7 +21,8 @@ return new class extends Migration
             $table->string('curso', 50);           
             $table->string('email');           
             $table->string('telefone');           
-            $table->string('imagem');  
+            $table->string('imagem'); 
+            $table->string('senha'); 
             $table->softDeletes();
             $table->timestamps();
         });

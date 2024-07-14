@@ -15,3 +15,4 @@ Route::apiResource('aluno', AlunoController::class);
 Route::apiResource('coordenacao', CoordenacaoController::class);
 Route::apiResource('responsavel', ResponsavelController::class);
 Route::apiResource('frequencia', FrequenciaController::class);
+Route::post('aluno/{id}/validar-senha', [AlunoController::class, 'validarSenha']);

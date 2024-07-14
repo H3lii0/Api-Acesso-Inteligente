@@ -35,7 +35,8 @@ class AlunoController extends Controller
             'curso' => $request->curso,
             'email' => $request->email,
             'telefone' => $request->telefone,
-            'imagem' => $request->imagem
+            'imagem' => $request->imagem,
+            'senha' => $request->senha
         ]);
 
         return Response()->json($aluno, 201);
@@ -49,6 +50,21 @@ class AlunoController extends Controller
         $aluno = $this->aluno->find($id);
 
         return Response()->json($aluno, 200);
+    }
+
+    public function validarSenha(Request $request, $id)
+    {
+        $aluno = $this->aluno->find($id);
+
+        if (!$aluno) {
+            return response()->json(['message' => 'Aluno não encontrado'], 404);
+        }
+
+        if ($aluno->senha === $request->input('senha')) {
+            return response()->json(['acessoPermitido' => true]);
+        } else {
+            return response()->json(['acessoPermitido' => false]);
+        }
     }
 
     /**
