@@ -8,17 +8,29 @@ class AuthController extends Controller
 {
     public function login(Request $request){
 
-        $credenciais = $request->all(['email', 'password']);
-        
-        $token = auth('api')->attempt($credenciais);
+        $credenciais = $request->only(['email', 'password']);
 
-        if($token){
-            return Response()->json(['token' => $token]);
-        } else {
+        if(!$token = auth('api')->attempt($credenciais)){
             return Response()->json(['erro' => 'Usuário ou senha inválido!'], 403);
         }
         
-        return $token;
+        return Response()->json(['token' => $token]);
     }
 
+    public function logout()
+    {
+        auth('api')->logout();
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    public function refresh()
+    {
+        $token = auth('api')->refresh();
+        return response()->json(['token' => $token]);
+    }
+
+    public function me()
+    {
+        return response()->json(auth('api')->user());
+    }
 }
