@@ -16,10 +16,10 @@ Route::prefix('v1')->middleware('jwt.auth')->group( function() {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh',[AuthController::class, 'refresh']);
     Route::get('me',[AuthController::class, 'me']);
-    Route::apiResource('aluno', AlunoController::class);
     Route::apiResource('coordenacao', CoordenacaoController::class);
     Route::apiResource('responsavel', ResponsavelController::class);
     Route::apiResource('frequencia', FrequenciaController::class);
-    Route::post('aluno/{id}/validar-senha', [AlunoController::class, 'validarSenha']);
 });
+Route::apiResource('aluno', AlunoController::class);
+Route::post('aluno/{id}/validar-senha', [AlunoController::class, 'validarSenha']);
 Route::post('login', [AuthController::class, 'login']);
