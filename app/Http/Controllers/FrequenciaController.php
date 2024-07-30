@@ -3,17 +3,49 @@
 namespace App\Http\Controllers;
 
 use App\Models\Frequencia;
+use Illuminate\Http\Request;
+use App\Models\Aluno;
 use App\Http\Requests\StoreFrequenciaRequest;
 use App\Http\Requests\UpdateFrequenciaRequest;
+use Carbon\Carbon;
 
 class FrequenciaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function registrarAcesso(Request $request) 
     {
-        //
+        $alunoId = $request->input('id_aluno');
+        
+        $aluno = Aluno::find($alunoId);
+
+        if (!$aluno) {
+            return response()->json(['message' => 'Aluno não encotrado'], 404);
+        } 
+
+        $dataHoraAtual = Carbon::now();
+
+        $daysOfWeek = [
+            'Monday' => 'Segunda-feira',
+            'Tuesday' => 'Terça-feira',
+            'Wednesday' => 'Quarta-feira',
+            'Thursday' => 'Quinta-feira',
+            'Friday' => 'Sexta-feira',
+            'Saturday' => 'Sábado',
+            'Sunday' => 'Domingo'
+        ];
+
+        $diaSemana = $dataHoraAtual->format('l');
+
+        $diaSemanaPortugues = $daysOfWeek[$diaSemana] ?? 'Desconhecido';
+
+        $frequencia = Frequencia::create([
+            'id_aluno' => $alunoId,
+            'registro_acesso' => $dataHoraAtual,
+            'data_acesso' => $dataHoraAtual->toDateString(),
+            'hora_acesso' => $dataHoraAtual->toTimeString(),
+            'dia_semana' => $diaSemanaPortugues
+        ]);
+
+        return response()->json($frequencia, 201);
     }
 
     /**

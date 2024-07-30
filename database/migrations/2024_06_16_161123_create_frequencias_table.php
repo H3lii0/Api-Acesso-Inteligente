@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('frequencia', function (Blueprint $table) {
+        Schema::create('frequencias', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_aluno')->nullable()->constrained('alunos')->nullOnDelete();
             $table->dateTime('registro_acesso');

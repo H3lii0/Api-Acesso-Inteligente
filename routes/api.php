@@ -21,5 +21,6 @@ Route::prefix('v1')->middleware('jwt.auth')->group( function() {
     Route::apiResource('frequencia', FrequenciaController::class);
 });
 Route::apiResource('aluno', AlunoController::class);
+Route::post('/registrar-acesso', [FrequenciaController::class, 'registrarAcesso']);
 Route::post('aluno/{id}/validar-senha', [AlunoController::class, 'validarSenha']);
 Route::post('login', [AuthController::class, 'login']);

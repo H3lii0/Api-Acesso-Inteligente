@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Aluno;
 use Illuminate\Http\Request;
+use App\Http\Controllers\FrequenciaController;
 
 class AlunoController extends Controller
 {
@@ -61,6 +62,9 @@ class AlunoController extends Controller
         }
 
         if ($aluno->senha === $request->input('senha')) {
+
+            app(FrequenciaController::class)->registrarAcesso($request->merge(['id_aluno' =>$id ]));
+
             return response()->json(['acessoPermitido' => true]);
         } else {
             return response()->json(['acessoPermitido' => false]);
