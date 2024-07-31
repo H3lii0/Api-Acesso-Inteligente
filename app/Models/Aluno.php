@@ -20,4 +20,9 @@ class Aluno extends Model
         'imagem',
         'senha'
     ];
+
+    public function frequencias()
+    {
+        return $this->hasMany(Frequencia::class, 'id_aluno');
+    }
 }

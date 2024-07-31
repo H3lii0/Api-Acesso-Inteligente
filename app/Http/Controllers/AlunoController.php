@@ -18,7 +18,7 @@ class AlunoController extends Controller
      */
     public function index()
     {
-        $aluno = $this->aluno->get();
+        $aluno = Aluno::with('frequencias')->get();
         return Response()->json($aluno, 200);
     }
 

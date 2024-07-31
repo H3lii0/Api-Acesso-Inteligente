@@ -11,6 +11,20 @@ use Carbon\Carbon;
 
 class FrequenciaController extends Controller
 {
+    private $frequencia;
+
+    public function __construct(Frequencia $frequencia)
+    {
+        $this->frequencia = $frequencia;
+    }
+
+    public function index ()
+    {
+        $frequencia = $this->frequencia->get();
+
+        return Response()->json($frequencia, 200);
+    }
+    
     public function registrarAcesso(Request $request) 
     {
         $alunoId = $request->input('id_aluno');

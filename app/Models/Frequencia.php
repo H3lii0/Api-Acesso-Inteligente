@@ -16,4 +16,9 @@ class Frequencia extends Model
         'hora_acesso',
         'dia_semana',
     ];
+
+    public function aluno()
+    {
+        return $this->belongsTo(Aluno::class, 'id_aluno');
+    }
 }
