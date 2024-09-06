@@ -18,9 +18,14 @@ class FrequenciaController extends Controller
         $this->frequencia = $frequencia;
     }
 
-    public function index ()
+    public function index (Request $request)
     {
-        $frequencia = $this->frequencia->get();
+        $paginado = $request->input('per_page', 20);
+        $page = $request->input('page', 1);
+
+        $frequencia = Frequencia::with('aluno')
+            ->orderBy('registro_acesso', 'desc')
+            ->paginate($paginado, ['*'], 'page', $page);
 
         return Response()->json($frequencia, 200);
     }
