@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AcessosController;
 use App\Http\Controllers\AlunoController;
 use App\Http\Controllers\CoordenacaoController;
 use App\Http\Controllers\FrequenciaController;
@@ -18,10 +19,11 @@ Route::prefix('v1')->middleware('jwt.auth')->group( function() {
     Route::get('me',[AuthController::class, 'me']);
     Route::apiResource('coordenacao', CoordenacaoController::class);
     Route::apiResource('responsavel', ResponsavelController::class);
-    Route::apiResource('frequencia', FrequenciaController::class);
+    // Route::apiResource('frequencia', FrequenciaController::class);
 });
 Route::apiResource('aluno', AlunoController::class);
 Route::apiResource('frequencia', FrequenciaController::class);
+Route::apiResource('total-acessos', AcessosController::class);
 Route::post('/registrar-acesso', [FrequenciaController::class, 'registrarAcesso']);
 Route::post('aluno/{id}/validar-senha', [AlunoController::class, 'validarSenha']);
 Route::post('login', [AuthController::class, 'login']);
