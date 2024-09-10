@@ -23,7 +23,8 @@ class FrequenciaController extends Controller
         $paginado = $request->input('per_page', 20);
         $page = $request->input('page', 1);
 
-        $frequencia = Frequencia::with('aluno')
+        $frequencia = Frequencia::whereDate('data_acesso', Carbon::today())
+            ->with('aluno')
             ->orderBy('registro_acesso', 'desc')
             ->paginate($paginado, ['*'], 'page', $page);
 
