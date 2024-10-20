@@ -17,11 +17,10 @@ return new class extends Migration
             $table->integer('matricula');
             $table->date('data_nascimento');
             $table->string('sexo', 10);           
-            $table->string('serie', 15);           
-            $table->string('curso', 50);           
+            $table->string('serie', 15)->nullable();           
+            $table->string('curso', 50)->nullable();           
             $table->string('email');           
             $table->string('telefone');           
-            $table->string('imagem'); 
             $table->string('senha'); 
             $table->softDeletes();
             $table->timestamps();

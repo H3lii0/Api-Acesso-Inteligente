@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Aluno;
 use Illuminate\Http\Request;
 use App\Http\Controllers\FrequenciaController;
+use Illuminate\Support\Facades\Log;
 
 class AlunoController extends Controller
 {
     private $aluno;
 
-    public function __construct(Aluno $aluno) {
+    public function __construct(Aluno $aluno)
+    {
         $this->aluno = $aluno;
     }
     /**
@@ -27,21 +29,32 @@ class AlunoController extends Controller
      */
     public function store(Request $request)
     {
-        $aluno = $this->aluno->create([
-            'nome' => $request->nome,
-            'matricula'=> $request->matricula,
-            'data_nascimento' => $request->data_nascimento,
-            'sexo' => $request->sexo,
-            'serie' => $request->serie,
-            'curso' => $request->curso,
-            'email' => $request->email,
-            'telefone' => $request->telefone,
-            'imagem' => $request->imagem,
-            'senha' => $request->senha
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'nome' => 'required|string',
+                'matricula' => 'required|numeric',
+                'data_nascimento' => 'required|string',
+                'sexo' => 'required|string',
+                'email' => 'required|string|email',
+                'telefone' => 'required|string',
+                'senha' => 'required|string|min:6',
+                'curso' => 'required|string',
+                'serie' => 'required|string'
+            ]);
 
-        return Response()->json($aluno, 201);
+            $validatedData['data_nascimento'] = \DateTime::createFromFormat('d/m/Y', $validatedData['data_nascimento']);
+
+            $validatedData['data_nascimento'] = $validatedData['data_nascimento']->format('Y-m-d');
+
+            $aluno = $this->aluno->create($validatedData);
+
+            return response()->json($aluno, 201);
+        } catch (\Exception $e) {
+            Log::error('Erro ao cadastrar aluno: ' . $e->getMessage());
+            return response()->json(['error' => 'Erro ao cadastrar aluno, tente novamente mais tarde.'], 500);
+        }
     }
+
 
     /**
      * Display the specified resource.
@@ -63,7 +76,7 @@ class AlunoController extends Controller
 
         if ($aluno->senha === $request->input('senha')) {
 
-            app(FrequenciaController::class)->registrarAcesso($request->merge(['id_aluno' =>$id ]));
+            app(FrequenciaController::class)->registrarAcesso($request->merge(['id_aluno' => $id]));
 
             return response()->json(['acessoPermitido' => true]);
         } else {

@@ -17,7 +17,6 @@ class Aluno extends Model
         'curso',
         'email',
         'telefone',
-        'imagem',
         'senha'
     ];
 
