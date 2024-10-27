@@ -18,9 +18,12 @@ class AlunoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $aluno = Aluno::with('frequencias')->get();
+        $paginado = $request->input('per_page', 99999);
+        $pagina = $request->input('page', 1);
+ 
+        $aluno = Aluno::with('frequencias')->paginate($paginado, ['*'], 'page', $pagina);
         return Response()->json($aluno, 200);
     }
 
