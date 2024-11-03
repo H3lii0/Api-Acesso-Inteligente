@@ -22,7 +22,7 @@ class AlunoController extends Controller
     {
         $paginado = $request->input('per_page', 99999);
         $pagina = $request->input('page', 1);
- 
+
         $aluno = Aluno::with('frequencias')->paginate($paginado, ['*'], 'page', $pagina);
         return Response()->json($aluno, 200);
     }
@@ -92,25 +92,50 @@ class AlunoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $aluno = $this->aluno->find($id);
+        // Log dos dados recebidos
+        Log::info('Dados recebidos para atualização:', $request->all());
 
-        if ($request->method() === 'PATCH') {
-
-            $aluno->fill($request->all());
-            $aluno->save();
+        // Verifica se o aluno existe
+        $aluno = Aluno::find($id);
+        if (!$aluno) {
+            return response()->json(['error' => 'Aluno não encontrado'], 404);
         }
 
-        return Response()->json($aluno, 200);
+        // Atualiza somente os campos fornecidos
+        $aluno->nome = $request->input('nome', $aluno->nome);
+        $aluno->matricula = $request->input('matricula', $aluno->matricula);
+        $aluno->data_nascimento = $request->input('data_nascimento', $aluno->data_nascimento);
+        $aluno->sexo = $request->input('sexo', $aluno->sexo);
+        $aluno->curso = is_array($request->input('curso')) ? $request->input('curso')['code'] : $request->input('curso');
+        $aluno->serie = is_array($request->input('serie')) ? $request->input('serie')['code'] : $request->input('serie');
+        $aluno->email = $request->input('email', $aluno->email);
+        $aluno->telefone = $request->input('telefone', $aluno->telefone);
+        $aluno->senha = $request->input('senha', $aluno->senha);
+
+        // Salva as alterações no banco
+        $aluno->save();
+
+        // Retorna o aluno atualizado
+        return response()->json($aluno);
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Request $request, $id)
     {
-        $aluno = $this->aluno->find($id);
-        $aluno->delete();
 
-        return Response()->json(['msg' => 'Aluno(a), excluido com sucesso']);
+        $aluno = $this->aluno->find($id);
+        if (!$aluno) {
+            return response()->json(['error' => 'Aluno não encontrado'], 404);
+        }
+
+        try {
+            $aluno->delete();
+            return response()->json(['msg' => 'Aluno(a) excluído com sucesso'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao excluir o aluno: ' . $e->getMessage()], 500);
+        }
     }
 }
