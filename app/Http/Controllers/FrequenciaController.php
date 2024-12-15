@@ -30,6 +30,18 @@ class FrequenciaController extends Controller
 
         return Response()->json($frequencia, 200);
     }
+
+    public function historicoFrequencia (Request $request)
+    {
+        $paginado = $request->input('per_page', 20);
+        $page = $request->input('page', 1);
+
+        $frequencia = Frequencia::with('aluno')
+            ->orderBy('registro_acesso', 'desc')
+            ->paginate($paginado, ['*'], 'page', $page);
+
+        return Response()->json($frequencia, 200);
+    }
     
     public function registrarAcesso(Request $request) 
     {
