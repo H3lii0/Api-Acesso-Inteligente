@@ -39,6 +39,7 @@ class FrequenciaController extends Controller
         $page = $request->input('page', 1);
     
         $frequencia = Frequencia::where('id_aluno', $id)
+            ->with('aluno')
             ->orderBy('registro_acesso', 'desc')
             ->paginate($paginado,['*'], 'page', $page);
     
