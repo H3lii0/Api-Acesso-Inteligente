@@ -8,6 +8,7 @@ use App\Models\Aluno;
 use App\Http\Requests\StoreFrequenciaRequest;
 use App\Http\Requests\UpdateFrequenciaRequest;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class FrequenciaController extends Controller
 {
@@ -31,6 +32,19 @@ class FrequenciaController extends Controller
         return Response()->json($frequencia, 200);
     }
 
+    public function frequenciaAluno(Request $request, $id)
+    {
+    
+        $paginado = $request->input('per_page', 20);
+        $page = $request->input('page', 1);
+    
+        $frequencia = Frequencia::where('id_aluno', $id)
+            ->orderBy('registro_acesso', 'desc')
+            ->paginate($paginado,['*'], 'page', $page);
+    
+        return response()->json($frequencia, 200);
+    }
+    
     public function historicoFrequencia (Request $request)
     {
         $paginado = $request->input('per_page', 20);

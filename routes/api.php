@@ -22,6 +22,7 @@ Route::prefix('v1')->middleware('jwt.auth')->group( function() {
 Route::get('historico-frequencia', [FrequenciaController::class, 'historicoFrequencia']);
 Route::apiResource('aluno', AlunoController::class);
 Route::apiResource('frequencia', FrequenciaController::class);
+Route::get('frequenciaAluno/{id}', [FrequenciaController::class, 'frequenciaAluno']);
 Route::apiResource('total-acessos', AcessosController::class);
 Route::post('/registrar-acesso', [FrequenciaController::class, 'registrarAcesso']);
 Route::post('aluno/{id}/validar-senha', [AlunoController::class, 'validarSenha']);
