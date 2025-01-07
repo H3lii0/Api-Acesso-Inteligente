@@ -27,3 +27,6 @@ Route::apiResource('total-acessos', AcessosController::class);
 Route::post('/registrar-acesso', [FrequenciaController::class, 'registrarAcesso']);
 Route::post('aluno/{id}/validar-senha', [AlunoController::class, 'validarSenha']);
 Route::post('login', [AuthController::class, 'login']);
+
+
+Route::get('/acessos-por-periodo', [FrequenciaController::class, 'acessosPorPeriodo']);

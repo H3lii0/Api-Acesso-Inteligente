@@ -95,6 +95,32 @@ class FrequenciaController extends Controller
         return response()->json($frequencia, 201);
     }
 
+    public function acessosPorPeriodo(Request $request)
+    {
+        $startDate = $request->input('start_date', Carbon::now()->subDays(7)->toDateString());
+        $endDate = $request->input('end_date', Carbon::now()->toDateString());
+        $groupBy = $request->input('group_by', 'day');
+
+        $formatoData = match ($groupBy) {
+            'day' => '%Y-%m-%d',
+            'week' => '%X-%V',
+            'month' => '%Y-%m',
+            default => '%Y-%m-%d',
+        };
+
+        $frequencia = Frequencia::selectRaw("DATE_FORMAT(data_acesso, '{$formatoData}') as data, count(*) as total_acessos")
+            ->whereBetween('data_acesso', [$startDate, $endDate])
+            ->groupBy('data')
+            ->get();
+
+        return response()->json([
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+            'group_by' => $groupBy,
+            'data' => $frequencia,
+        ], 200);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
