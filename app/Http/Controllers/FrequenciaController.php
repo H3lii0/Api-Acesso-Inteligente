@@ -68,7 +68,7 @@ class FrequenciaController extends Controller
             return response()->json(['message' => 'Aluno não encotrado'], 404);
         } 
 
-        $dataHoraAtual = Carbon::now();
+        $dataHoraAtual = Carbon::now(config('app.timezone'));
 
         $daysOfWeek = [
             'Monday' => 'Segunda-feira',
@@ -111,8 +111,9 @@ class FrequenciaController extends Controller
         $frequencia = Frequencia::selectRaw("DATE_FORMAT(data_acesso, '{$formatoData}') as data, count(*) as total_acessos")
             ->whereBetween('data_acesso', [$startDate, $endDate])
             ->groupBy('data')
+            ->orderBy('data', 'asc')
             ->get();
-
+        
         return response()->json([
             'start_date' => $startDate,
             'end_date' => $endDate,
